@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'notifications.dart';
 import 'screens/ajustes.dart';
 import 'screens/cantinho.dart';
+import 'screens/caderninho.dart';
 import 'screens/hoje.dart';
 import 'screens/onboarding.dart';
 import 'store.dart';
@@ -64,7 +65,7 @@ class PepitaApp extends StatelessWidget {
   }
 }
 
-/// As 3 abas (Hoje · Cantinho · Ajustes) com a barra flutuante.
+/// As 4 abas (Hoje · Cantinho · Caderninho · Ajustes) com a barra flutuante.
 class Principal extends StatefulWidget {
   const Principal({super.key, required this.store});
 
@@ -99,7 +100,8 @@ class _PrincipalState extends State<Principal> {
   Widget _tela() => switch (_aba) {
         0 => TelaHoje(key: const ValueKey(0), store: widget.store),
         1 => TelaCantinho(key: const ValueKey(1), store: widget.store),
-        _ => TelaAjustes(key: const ValueKey(2), store: widget.store),
+        2 => TelaCaderninho(key: const ValueKey(2), store: widget.store),
+        _ => TelaAjustes(key: const ValueKey(3), store: widget.store),
       };
 
   @override
