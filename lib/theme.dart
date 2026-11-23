@@ -18,6 +18,11 @@ class Paleta {
   static const cacauClaro = Color(0xFFA88D9A);
   static const dourado = Color(0xFFFFD98A);
 
+  // Caderninho (folha de caderno fofinha)
+  static const manteiga = Color(0xFFFFF3C9);
+  static const papelLinha = Color(0xFFCFE6FA);
+  static const papelMargem = Color(0xFFF7B6CF);
+
   // Tons da mascote
   static const pessego = Color(0xFFF6D3C6);
   static const pessegoSombra = Color(0xFFEBB9AA);
@@ -67,6 +72,39 @@ class Sombras {
         ),
       ];
 }
+
+/// Fontinhas fofas do Caderninho.
+class FonteNota {
+  const FonteNota(this.nome, this.familia, this.tamanho);
+  final String nome;
+  final String familia;
+  final double tamanho;
+
+  TextStyle estilo({Color cor = Paleta.cacau, double? tamanhoExtra}) =>
+      TextStyle(
+        fontFamily: familia,
+        fontSize: tamanhoExtra ?? tamanho,
+        color: cor,
+        height: 1.25,
+      );
+
+  static const todas = [
+    FonteNota('Letrinha', 'PatrickHand', 22),
+    FonteNota('Chique', 'Pacifico', 19),
+    FonteNota('Rabisco', 'Caveat', 27),
+    FonteNota('Redondinha', 'Sniglet', 19),
+  ];
+}
+
+/// Cores dos papeizinhos do Caderninho.
+const papeisDoCaderno = [
+  Paleta.creme,
+  Paleta.rosaBebe,
+  Paleta.azulBebe,
+  Paleta.menta,
+  Paleta.lavanda,
+  Paleta.manteiga,
+];
 
 class Textos {
   Textos._();

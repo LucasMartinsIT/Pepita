@@ -116,6 +116,60 @@ class Registro {
       );
 }
 
+/// Uma notinha do Caderninho. Texto livre, com fonte e papel à escolha.
+/// [tarefinha] só liga uma bolinha opcional de "feitinho" — sem contagem nem cobrança.
+class Nota {
+  final int id;
+  final String texto;
+  final int fonte;
+  final int papel;
+  final bool tarefinha;
+  final bool feita;
+
+  const Nota({
+    required this.id,
+    required this.texto,
+    this.fonte = 0,
+    this.papel = 0,
+    this.tarefinha = false,
+    this.feita = false,
+  });
+
+  Nota copiar({
+    String? texto,
+    int? fonte,
+    int? papel,
+    bool? tarefinha,
+    bool? feita,
+  }) =>
+      Nota(
+        id: id,
+        texto: texto ?? this.texto,
+        fonte: fonte ?? this.fonte,
+        papel: papel ?? this.papel,
+        tarefinha: tarefinha ?? this.tarefinha,
+        feita: feita ?? this.feita,
+      );
+
+  Map<String, dynamic> paraJson() => {
+        'id': id,
+        'texto': texto,
+        'fonte': fonte,
+        'papel': papel,
+        'tarefinha': tarefinha,
+        'feita': feita,
+      };
+
+  factory Nota.deJson(Map<String, dynamic> j) => Nota(
+        id: j['id'] as int,
+        texto: j['texto'] as String,
+        fonte: j['fonte'] as int? ?? 0,
+        papel: j['papel'] as int? ?? 0,
+        tarefinha: j['tarefinha'] as bool? ?? false,
+        feita: j['feita'] as bool? ?? false,
+      );
+}
+
 /// "AAAA-MM-DD"
 String chaveDia(DateTime d) =>
     '${d.year.toString().padLeft(4, '0')}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';

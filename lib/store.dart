@@ -13,12 +13,16 @@ class Store extends ChangeNotifier {
   static const _kMomentos = 'momentos';
   static const _kRegistros = 'registros';
   static const _kOnboarding = 'onboardingFeito';
+  static const _kNotas = 'notas';
 
   late SharedPreferences _prefs;
 
   String nome = nomePadrao;
   List<Momento> momentos = List.of(Momento.padrao);
   bool onboardingFeito = false;
+
+  /// Notinhas do Caderninho, da mais nova para a mais antiga.
+  List<Nota> notas = [];
 
   /// "AAAA-MM-DD" -> { idMomento -> Registro }
   final Map<String, Map<int, Registro>> _registros = {};
@@ -41,6 +45,17 @@ class Store extends ChangeNotifier {
         if (lista.length == 3) momentos = lista;
       } catch (_) {
         // dado ilegível: segue com os horários padrão
+      }
+    }
+
+    final jn = _prefs.getString(_kNotas);
+    if (jn != null) {
+      try {
+        notas = (jsonDecode(jn) as List)
+            .map((e) => Nota.deJson(e as Map<String, dynamic>))
+            .toList();
+      } catch (_) {
+        notas = [];
       }
     }
 
@@ -133,11 +148,41 @@ class Store extends ChangeNotifier {
     aoMudarAjustes?.call();
   }
 
+  /// Cria a nota (id novo) ou atualiza a existente.
+  Future<void> salvarNota(Nota nota) async {
+    final i = notas.indexWhere((n) => n.id == nota.id);
+    if (i >= 0) {
+      notas = [...notas]..[i] = nota;
+    } else {
+      notas = [nota, ...notas];
+    }
+    notifyListeners();
+    await _persistirNotas();
+  }
+
+  /// Devolve a posição para o "desfazer" poder recolocar no mesmo lugar.
+  Future<void> apagarNota(int id) async {
+    notas = notas.where((n) => n.id != id).toList();
+    notifyListeners();
+    await _persistirNotas();
+  }
+
+  Future<void> restaurarNota(Nota nota, int posicao) async {
+    final lista = [...notas]..removeWhere((n) => n.id == nota.id);
+    lista.insert(posicao.clamp(0, lista.length), nota);
+    notas = lista;
+    notifyListeners();
+    await _persistirNotas();
+  }
+
   Future<void> concluirOnboarding() async {
     onboardingFeito = true;
     notifyListeners();
     await _prefs.setBool(_kOnboarding, true);
   }
+
+  Future<void> _persistirNotas() => _prefs.setString(
+      _kNotas, jsonEncode(notas.map((n) => n.paraJson()).toList()));
 
   Future<void> _persistirMomentos() => _prefs.setString(
       _kMomentos, jsonEncode(momentos.map((m) => m.paraJson()).toList()));
