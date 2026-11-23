@@ -1,5 +1,3 @@
-import 'dart:ui' show FontVariation;
-
 import 'package:material_ui/material_ui.dart';
 
 /// Paleta, fontes, sombras e raios do Pepita.

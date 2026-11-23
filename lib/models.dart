@@ -1,4 +1,4 @@
-/// Modelos e helpers de data do Pepita.
+// Modelos e helpers de data do Pepita.
 
 enum TipoRegistro { postei, descanso }
 
