@@ -24,7 +24,8 @@ class Notificacoes {
   static const _canalDescricao = 'Lembretes carinhosos dos seus momentos de garimpo';
 
   static Future<void> iniciar() async {
-    if (_iniciado) return;
+    // Só Android por enquanto; a versão de PC (Windows) entra depois.
+    if (_iniciado || defaultTargetPlatform != TargetPlatform.android) return;
     tzdata.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('America/Sao_Paulo'));
 
@@ -114,6 +115,7 @@ class Notificacoes {
 
   /// "Testar lembrete": dispara uma notificação de exemplo na hora.
   static Future<void> testar(String nome) async {
+    if (!_iniciado) return;
     final titulo = Frases.sortear(Frases.notifTitulo, nome: nome, momento: 'Garimpo');
     final corpo = Frases.sortear(Frases.notifCorpo, nome: nome, momento: 'Garimpo');
     await _plugin.show(
