@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.lucas.pepita"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 37 // exigido pelo flutter_local_notifications e androidx.core
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
