@@ -179,7 +179,9 @@ class PepitaPainter extends CustomPainter {
   }
 
   void _olho(Canvas canvas, double x, double y) {
-    final arcoAlpha = 1 - pose.pontos;
+    // Troca arquinho <-> pontinho sem os dois aparecerem juntos.
+    final arcoAlpha = (1 - pose.pontos * 2).clamp(0.0, 1.0);
+    final pontoAlpha = (pose.pontos * 2 - 1).clamp(0.0, 1.0);
     if (arcoAlpha > 0.01) {
       // Arquinho: curva para cima (feliz) ou para baixo (soninho).
       final curva = (1 - 2 * pose.sono) * (1 - 0.9 * pose.piscar);
@@ -195,15 +197,15 @@ class PepitaPainter extends CustomPainter {
           ..strokeCap = StrokeCap.round,
       );
     }
-    if (pose.pontos > 0.01) {
+    if (pontoAlpha > 0.01) {
       final alt = 5.4 * (1 - 0.92 * pose.piscar);
       canvas.drawOval(
         Rect.fromCenter(center: Offset(x, y), width: 5.4, height: alt),
-        Paint()..color = Paleta.cacau.withValues(alpha: pose.pontos),
+        Paint()..color = Paleta.cacau.withValues(alpha: pontoAlpha),
       );
       if (pose.piscar < 0.5) {
         canvas.drawCircle(Offset(x + 1, y - 1.2), 1.1,
-            Paint()..color = Paleta.branco.withValues(alpha: pose.pontos));
+            Paint()..color = Paleta.branco.withValues(alpha: pontoAlpha));
       }
     }
   }
@@ -509,7 +511,6 @@ class _PepitaState extends State<Pepita> with SingleTickerProviderStateMixin {
         break;
       case EstadoPepita.animada:
         lanterna = 0.55 + 0.35 * math.sin(_t * 2.6);
-        pontos = 0.35;
         inclina = 0.07 * math.sin(_t * 2 * math.pi / 2.4) * mov;
         break;
       case EstadoPepita.comemorando:
