@@ -48,6 +48,10 @@ lib/
 - Declarar os receivers de boot do plugin no `AndroidManifest.xml` para os lembretes sobreviverem a reinício.
 - Ícone pequeno da notificação: drawable branco/monocromático (silhueta da Pepita), não o ícone colorido.
 - Permissão `INTERNET` no manifest se usar `google_fonts` em tempo de execução.
+- (Pacote `google_fonts` não é usado: as fontes estão em `assets/fonts` e o app não precisa de `INTERNET`.)
+- `compileSdk` precisa ser **37** (exigido pelo `flutter_local_notifications` e pelo `androidx.core`) — instalar `platforms;android-37` no SDK. Gradle precisa de **JDK 17**.
+- Neste Flutter os widgets Material vêm de `package:material_ui/material_ui.dart` (é o import usado em todo o `lib/`).
+- Ícone do app, `pepita_grande.png` (notificação) e demais artes saem do painter: `flutter test tool/gerar_arte_test.dart`.
 
 ## Comandos
 - `flutter pub get` · `flutter analyze` · `flutter test` · `flutter run` · `flutter build apk --release`
