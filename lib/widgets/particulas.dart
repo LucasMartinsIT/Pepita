@@ -68,7 +68,7 @@ class ExplosaoDeParticulasState extends State<ExplosaoDeParticulas>
     _particulas = List.generate(n, (i) {
       final forma = _Forma.values[_rnd.nextInt(3)];
       final angulo = -math.pi / 2 + (_rnd.nextDouble() - 0.5) * math.pi * 1.5;
-      final forca = 140 + _rnd.nextDouble() * 190;
+      final forca = 280 + _rnd.nextDouble() * 260;
       return _Particula(
         forma: forma,
         cor: switch (forma) {
@@ -78,7 +78,7 @@ class ExplosaoDeParticulasState extends State<ExplosaoDeParticulas>
         },
         vx: math.cos(angulo) * forca,
         vy: math.sin(angulo) * forca,
-        tamanho: 7 + _rnd.nextDouble() * 8,
+        tamanho: 9 + _rnd.nextDouble() * 9,
         giro: (_rnd.nextDouble() - 0.5) * 6,
         vida: 1.1 + _rnd.nextDouble() * 0.6,
       );
