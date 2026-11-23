@@ -19,15 +19,25 @@ Future<void> main() async {
 
   final store = Store();
   await store.carregar();
-  await Notificacoes.iniciar();
   store.aoMudarAjustes =
       () => Notificacoes.reagendar(store.momentos, store.nome);
-  // Reagenda a cada abertura: sorteia frases novas para os próximos dias.
-  if (store.onboardingFeito) {
-    await Notificacoes.reagendar(store.momentos, store.nome);
-  }
 
+  // O app abre primeiro; as notificações iniciam depois e, se algo falhar
+  // nelas, a tela continua funcionando normalmente.
   runApp(PepitaApp(store: store));
+  _iniciarNotificacoes(store);
+}
+
+Future<void> _iniciarNotificacoes(Store store) async {
+  try {
+    await Notificacoes.iniciar();
+    // Reagenda a cada abertura: sorteia frases novas para os próximos dias.
+    if (store.onboardingFeito) {
+      await Notificacoes.reagendar(store.momentos, store.nome);
+    }
+  } catch (e) {
+    debugPrint('Notificações indisponíveis: $e');
+  }
 }
 
 class PepitaApp extends StatelessWidget {

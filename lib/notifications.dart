@@ -53,13 +53,21 @@ class Notificacoes {
   static Future<bool> pedirPermissao() async {
     final android = _plugin.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
-    return await android?.requestNotificationsPermission() ?? false;
+    try {
+      return await android?.requestNotificationsPermission() ?? false;
+    } catch (_) {
+      return false;
+    }
   }
 
   static Future<bool> permissaoConcedida() async {
     final android = _plugin.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
-    return await android?.areNotificationsEnabled() ?? false;
+    try {
+      return await android?.areNotificationsEnabled() ?? false;
+    } catch (_) {
+      return false;
+    }
   }
 
   static NotificationDetails _detalhes(String corpo) => NotificationDetails(
@@ -80,7 +88,11 @@ class Notificacoes {
   /// assim as frases sorteadas variam ao longo dos dias.
   static Future<void> reagendar(List<Momento> momentos, String nome) async {
     if (!_iniciado) return;
-    await _plugin.cancelAll();
+    try {
+      await _plugin.cancelAll();
+    } catch (e) {
+      debugPrint('Não consegui limpar os lembretes: $e');
+    }
     for (final m in momentos) {
       if (!m.lembrete) continue;
       final titulo = Frases.sortear(Frases.notifTitulo, nome: nome, momento: m.nome);
@@ -118,11 +130,15 @@ class Notificacoes {
     if (!_iniciado) return;
     final titulo = Frases.sortear(Frases.notifTitulo, nome: nome, momento: 'Garimpo');
     final corpo = Frases.sortear(Frases.notifCorpo, nome: nome, momento: 'Garimpo');
-    await _plugin.show(
-      id: 99,
-      title: titulo,
-      body: corpo,
-      notificationDetails: _detalhes(corpo),
-    );
+    try {
+      await _plugin.show(
+        id: 99,
+        title: titulo,
+        body: corpo,
+        notificationDetails: _detalhes(corpo),
+      );
+    } catch (e) {
+      debugPrint('Não consegui mostrar o lembrete de teste: $e');
+    }
   }
 }
