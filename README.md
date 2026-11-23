@@ -8,7 +8,7 @@
 
 ![Flutter](https://img.shields.io/badge/Flutter-Material%203-A9D3F5?logo=flutter&logoColor=white)
 ![Plataforma](https://img.shields.io/badge/plataforma-Android-D3F2E4)
-![Testes](https://img.shields.io/badge/testes-19%20passando-F9C6DA)
+![Testes](https://img.shields.io/badge/testes-21%20passando-F9C6DA)
 ![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-E9E0FA)
 
 </div>
@@ -46,10 +46,11 @@ Isso não é só intenção: há [testes automáticos](test/linguagem_gentil_tes
 
 <table>
   <tr>
-    <td align="center" width="25%"><img src="docs/img/hoje.png" alt="Tela Hoje"><br><b>Hoje</b><br><sub>Saudação, a Pepita e os 3 momentos. O momento "agora" brilha suavemente.</sub></td>
-    <td align="center" width="25%"><img src="docs/img/sheet.png" alt="Sheet de registro"><br><b>Registro</b><br><sub>Contador opcional (começa vazio!) e dois botões igualmente gentis.</sub></td>
-    <td align="center" width="25%"><img src="docs/img/cantinho.png" alt="Tela Cantinho"><br><b>Cantinho</b><br><sub>A semana em florzinhas. Dia sem postagem = botão de flor descansando.</sub></td>
-    <td align="center" width="25%"><img src="docs/img/ajustes.png" alt="Tela Ajustes"><br><b>Ajustes</b><br><sub>Nome, horários, emojis e lembretes com switch em formato de coração.</sub></td>
+    <td align="center" width="20%"><img src="docs/img/hoje.png" alt="Tela Hoje"><br><b>Hoje</b><br><sub>Saudação, a Pepita e os 3 momentos. O momento "agora" brilha suavemente.</sub></td>
+    <td align="center" width="20%"><img src="docs/img/sheet.png" alt="Sheet de registro"><br><b>Registro</b><br><sub>Contador opcional (começa vazio!) e dois botões igualmente gentis.</sub></td>
+    <td align="center" width="20%"><img src="docs/img/cantinho.png" alt="Tela Cantinho"><br><b>Cantinho</b><br><sub>A semana em florzinhas. Dia sem postagem = botão de flor descansando.</sub></td>
+    <td align="center" width="20%"><img src="docs/img/caderninho.png" alt="Tela Caderninho"><br><b>Caderninho</b><br><sub>Notinhas numa folha de caderno, com fontes fofinhas e papéis coloridos.</sub></td>
+    <td align="center" width="20%"><img src="docs/img/ajustes.png" alt="Tela Ajustes"><br><b>Ajustes</b><br><sub>Nome, horários, emojis e lembretes com switch em formato de coração.</sub></td>
   </tr>
 </table>
 
@@ -74,7 +75,8 @@ O desenho é separado do comportamento (`PosePepita` → `PepitaPainter`), entã
 - Fundo com nuvenzinhas, corações e estrelinhas flutuando; o céu muda de tom conforme a hora do dia.
 - Toda interação responde: escala ao toque com mola, brilho e haptic leve.
 - Respeita "reduzir animações" do sistema (movimento forte vira fade simples).
-- Fontes **Fredoka** e **Quicksand** empacotadas — funciona 100% offline.
+- **Caderninho:** aba de anotações livres numa folha de caderno fofinha, com 4 fontes de letrinha e 6 papéis. A "bolinha de feitinho" é opcional e não conta nada.
+- Fontes **Fredoka** e **Quicksand** (mais as letrinhas do Caderninho) empacotadas — funciona 100% offline.
 - Ícone do app, imagem grande da notificação e silhueta da notificação gerados a partir do próprio desenho da Pepita ([`tool/gerar_arte_test.dart`](tool/gerar_arte_test.dart)).
 
 ## 🔔 Notificações
@@ -103,7 +105,7 @@ lib/
   store.dart           # ChangeNotifier + shared_preferences
   notifications.dart   # agendar/cancelar/testar lembretes
   frases.dart          # bancos de frases carinhosas
-  screens/             # hoje, cantinho, ajustes, onboarding
+  screens/             # hoje, cantinho, caderninho, ajustes, onboarding
   widgets/             # pepita, card de momento, sheet, flores, partículas, fundo…
 test/                  # linguagem gentil, modelos, store e fluxo do app
 tool/                  # gerador da arte do Android
@@ -132,7 +134,7 @@ flutter test tool/gerar_arte_test.dart
 
 ## ✅ Estado do projeto
 
-Todas as telas, animações, notificações e testes automáticos estão prontos (`flutter analyze` limpo e 19 testes passando). Ainda falta a verificação num **aparelho físico**: confirmar a entrega dos lembretes nos horários, depois de reiniciar o celular, e a abertura da sheet certa ao tocar na notificação.
+Todas as telas, animações, notificações e testes automáticos estão prontos (`flutter analyze` limpo e 21 testes passando). Ainda falta a verificação num **aparelho físico**: confirmar a entrega dos lembretes nos horários, depois de reiniciar o celular, e a abertura da sheet certa ao tocar na notificação.
 
 ## 📚 Documentação
 
@@ -147,7 +149,7 @@ Bot de promoções, automação de link de afiliado, vídeos, carrosséis, login
 
 ## 📄 Licença
 
-Código sob licença [MIT](LICENSE). As fontes Fredoka e Quicksand são distribuídas sob a SIL Open Font License ([Fredoka](assets/fonts/OFL-Fredoka.txt), [Quicksand](assets/fonts/OFL-Quicksand.txt)).
+Código sob licença [MIT](LICENSE). As fontes (Fredoka, Quicksand, Patrick Hand, Pacifico, Caveat e Sniglet) são distribuídas sob a SIL Open Font License; as licenças estão em [`assets/fonts`](assets/fonts).
 
 ---
 

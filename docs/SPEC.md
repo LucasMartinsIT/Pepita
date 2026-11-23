@@ -31,7 +31,7 @@ Ver a lista de "nunca fazer" no `CLAUDE.md` (streaks, metas, vermelho, linguagem
 
 ## 3. Telas
 
-Navegação: barra inferior flutuante arredondada (pílula creme com sombra rosa) com 3 abas e ícones fofos: **Hoje** · **Cantinho** · **Ajustes**. Troca de aba com transição suave (fade + leve slide) e o ícone ativo dá um "pulinho".
+Navegação: barra inferior flutuante arredondada (pílula creme com sombra rosa) com 4 abas e ícones fofos: **Hoje** · **Cantinho** · **Caderninho** · **Ajustes**. Troca de aba com transição suave (fade + leve slide) e o ícone ativo dá um "pulinho".
 
 ### 3.1 Hoje (tela principal)
 De cima para baixo:
@@ -81,7 +81,17 @@ Objetivo: ela ver o que fez com carinho, nunca o que "faltou".
 - Rodapé: "feito com 💗 pelo Lucas" (versão do app em texto pequeno).
 - Toda alteração de horário/switch **reagenda** as notificações imediatamente.
 
-### 3.5 Primeira abertura (onboarding, 3 telas)
+### 3.5 Caderninho (anotações livres)
+Quarta aba, entre Cantinho e Ajustes: um cantinho para anotar coisinhas (ideias, lembretes, rabiscos).
+- Fundo de **folha de caderno fofinha**: linhas azul-bebê, margem rosa e furinhos de fichário.
+- Cada nota é um papelzinho colado com fitinha, levemente inclinado. Papéis em 6 cores pastel.
+- **Fontes fofinhas** à escolha em cada nota: Letrinha (Patrick Hand), Chique (Pacifico), Rabisco (Caveat) e Redondinha (Sniglet).
+- Botão "+ nova notinha" abre uma sheet (mesma mola da sheet de registro, com a Pepita espiando): texto, fonte, papel e a chave opcional **"com bolinha de feitinho"**.
+- A bolinha de feitinho é só um coração que se preenche ao tocar: **sem prazo, sem contagem, sem lista de "pendentes"**. Nota feita fica um pouco mais clarinha (nunca riscada).
+- Tocar na nota edita; "apagar notinha" com desfazer pela snackbar fofa por 4s.
+- Dados: `notas` = lista de `{id, texto, fonte, papel, tarefinha, feita}` em `shared_preferences`.
+
+### 3.6 Primeira abertura (onboarding, 3 telas)
 1. Pepita acenando: "Oi, linda! Eu sou a Pepita 💎 Vou te lembrar dos seus momentos de garimpo, sem pressão nenhuma."
 2. Os 3 horários padrão em cards: "Esses horários funcionam? Você pode mudar quando quiser."
 3. Pedido de notificação: "Posso te mandar um recadinho na hora do garimpo?" → botão abre o pedido de permissão do sistema (Android 13+). Se ela negar: "Tudo bem! Você pode ligar depois nos ajustes 💗" e o app funciona normal.
@@ -215,6 +225,7 @@ Tudo local em `shared_preferences` (JSON):
 - `nome`: string
 - `momentos`: lista de 3 `{id, nome, emoji, ini (minutos do dia), fim, lembrete}`
 - `registros`: mapa `"AAAA-MM-DD" → { "0": {tipo, qtd?}, "1": …, "2": … }`, com `tipo` ∈ `postei` | `descanso` e `qtd` int opcional (1–999)
+- `notas`: lista de notinhas do Caderninho (ver §3.5)
 - `onboardingFeito`: bool
 
 `store.dart`: `ChangeNotifier` com `carregar()`, `salvarRegistro(dia, idMomento, registro)`, `apagarRegistro(...)`, `atualizarMomento(...)`, `restaurarPadrao()`. Cada escrita persiste na hora. Mudança em momentos → `Notificacoes.reagendar(momentos, nome)`.
