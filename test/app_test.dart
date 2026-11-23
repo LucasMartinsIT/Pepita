@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart' show TextField;
 import 'package:pepita/main.dart';
 import 'package:pepita/models.dart';
 import 'package:pepita/store.dart';
@@ -23,6 +24,8 @@ Future<void> _carregarFontes() async {
   for (final f in const {
     'Fredoka': 'assets/fonts/Fredoka.ttf',
     'Quicksand': 'assets/fonts/Quicksand.ttf',
+    'PatrickHand': 'assets/fonts/PatrickHand.ttf',
+    'Pacifico': 'assets/fonts/Pacifico.ttf',
   }.entries) {
     final dados = ByteData.sublistView(File(f.value).readAsBytesSync());
     await (FontLoader(f.key)..addFont(Future.value(dados))).load();
@@ -83,8 +86,29 @@ void main() {
     await t.pump(const Duration(seconds: 1));
     expect(find.text('Seu cantinho 💗'), findsOneWidget);
 
+    await t.tap(find.bySemanticsLabel('Caderninho'));
+    await t.pump(const Duration(seconds: 1));
+    expect(find.text('+ nova notinha'), findsOneWidget);
+
     await t.tap(find.bySemanticsLabel('Ajustes'));
     await t.pump(const Duration(seconds: 1));
     expect(find.text('Ajustes ✨'), findsOneWidget);
+  });
+
+  testWidgets('escrever uma notinha no Caderninho', (t) async {
+    final store = await _abrirApp(t);
+    await t.tap(find.bySemanticsLabel('Caderninho'));
+    await t.pump(const Duration(seconds: 1));
+
+    await t.tap(find.text('+ nova notinha'));
+    await t.pump();
+    await t.pump(const Duration(seconds: 1));
+    await t.enterText(find.byType(TextField), 'ver vídeo novo');
+    await t.tap(find.text('Guardar 💗'));
+    await t.pump();
+    await t.pump(const Duration(seconds: 1));
+
+    expect(store.notas.single.texto, 'ver vídeo novo');
+    expect(find.text('ver vídeo novo'), findsOneWidget);
   });
 }

@@ -88,4 +88,27 @@ void main() {
     await s.definirNome('   ');
     expect(s.nome, Store.nomePadrao);
   });
+
+  test('notinhas: criar, marcar feitinho, apagar e desfazer na mesma posição',
+      () async {
+    var s = Store();
+    await s.carregar();
+    await s.salvarNota(const Nota(id: 1, texto: 'primeira'));
+    await s.salvarNota(const Nota(id: 2, texto: 'segunda', fonte: 2, papel: 3, tarefinha: true));
+    expect(s.notas.map((n) => n.id), [2, 1]); // mais nova primeiro
+
+    await s.salvarNota(s.notas.first.copiar(feita: true));
+
+    s = Store();
+    await s.carregar();
+    expect(s.notas.first.feita, isTrue);
+    expect(s.notas.first.fonte, 2);
+    expect(s.notas.first.papel, 3);
+
+    final apagada = s.notas.first;
+    await s.apagarNota(apagada.id);
+    expect(s.notas.length, 1);
+    await s.restaurarNota(apagada, 0);
+    expect(s.notas.map((n) => n.id), [2, 1]);
+  });
 }
