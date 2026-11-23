@@ -27,3 +27,7 @@ android/key.properties
 # Sistema
 .DS_Store
 Thumbs.db
+
+# Imagens de referência soltas na raiz (nao fazem parte do projeto)
+/*.jpg
+/*.jpeg
