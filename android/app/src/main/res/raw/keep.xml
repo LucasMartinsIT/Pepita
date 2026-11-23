@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Impede o encolhimento de recursos de remover o que so e usado pelo nome (notificacoes). -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/ic_pepita,@drawable/pepita_grande" />
