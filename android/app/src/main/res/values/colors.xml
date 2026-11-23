@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- rosaBebe do tema do app -->
+    <color name="ic_launcher_background">#FDE4EE</color>
+    <!-- creme do tema do app -->
+    <color name="pepita_creme">#FFF8F0</color>
+</resources>
