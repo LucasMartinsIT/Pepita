@@ -35,7 +35,7 @@ class _FlorState extends State<Flor> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _ctl = AnimationController(vsync: this, duration: const Duration(seconds: 12));
-    _atualizar();
+    // (a animação é ligada em didChangeDependencies, onde o MediaQuery já existe)
   }
 
   @override

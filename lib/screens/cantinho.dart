@@ -9,7 +9,7 @@ import '../widgets/flor.dart';
 import '../widgets/pepita.dart';
 
 /// Histórico gentil: ela vê o que fez com carinho, nunca o que "faltou".
-/// Sem porcentagens, médias, comparações, "melhor dia" ou sequências.
+/// Sem porcentagens, médias, comparações, "melhor dia" nem contagem de dias seguidos.
 class TelaCantinho extends StatefulWidget {
   const TelaCantinho({super.key, required this.store});
 
@@ -157,6 +157,7 @@ class _TelaCantinhoState extends State<TelaCantinho> {
       aoTocar: () => setState(() => _selecionado = dia),
       semantica: '${nomesDiasSemana[i]}, ${dia.day}',
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(nomesDiasSemana[i],
               style: Textos.corpo(
