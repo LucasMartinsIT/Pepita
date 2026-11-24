@@ -50,7 +50,7 @@ De cima para baixo:
 4. **Rodapé do dia**, só se tiver pelo menos 1 registro `postei` com quantidade: "Hoje você garimpou **12** achados 💗" com pequenas joias animadas. Sem registro → frase do banco `semPressao`. Nunca mostrar "0".
 
 ### 3.2 Sheet de registro (bottom sheet)
-Abre com animação de mola (spring) de baixo para cima; a Pepita aparece pequenininha "espiando" na borda superior da sheet.
+Abre com animação de mola (spring) de baixo para cima; o Chocolatinho aparece pequenininho "espiando" na borda superior da sheet.
 - Título: "{emoji} {nome do momento}"
 - Pergunta suave: "Como foi esse garimpo?"
 - **Contador opcional**: botões grandes redondos `−` e `+` (rosa e azul bebê) com o número no meio em fonte grande. Começa em vazio ("—"), não em 0. Cada toque: número troca com animação de rolagem para cima/baixo + haptic leve. Pressionar e segurar o `+` acelera.
@@ -129,13 +129,14 @@ Paginação com bolinhas que viram coraçõezinhos; transições com parallax le
 - Fontes: **Fredoka** (títulos, números grandes) e **Quicksand** semibold (texto).
 - Fundo da tela Hoje: degradê vertical bem sutil creme → rosa-bebê, com 5–8 elementos flutuando devagar em parallax (nuvenzinhas, corações e estrelinhas em opacidade baixa, movimento senoidal lento). O céu muda de leve conforme o momento do dia (manhã mais azulzinho, almoço creme, volta pôr-do-sol rosado/lavanda).
 
-### 5.2 A mascote Pepita (`widgets/pepita.dart`)
-Personagem **original**: uma toupeirinha garimpeira. Desenhada em `CustomPainter`, tudo em formas arredondadas.
-- Corpo: gota/bolinha gordinha cor pêssego-rosado claro (`#F6D3C6`), barriguinha creme.
-- Olhos: arquinhos fechados felizes (estado padrão) ou pontinhos brilhantes (surpresa/alegria). Bochechas rosadas.
-- Focinho: bolinha rosa pequena; patinhas curtinhas com almofadinhas rosa.
-- Capacete de garimpeira creme com uma **lanterna em forma de coração** que acende (glow dourado) nas comemorações.
-- Segura (ou tem ao lado) uma **pepita/joia dourada** facetada que brilha de tempos em tempos.
+### 5.2 A mascote Chocolatinho (`widgets/pepita.dart`)
+Personagem **autoral**, criada pela namorada do Lucas (o app se chama Pepita; a mascote é o Chocolatinho). Desenhada em `CustomPainter`, tudo em formas arredondadas.
+- Corpo branco e fofinho com contorno azul-bebê fininho e sombreado suave; cabeça larga e redondinha.
+- **Orelhas longas e caídas** que balançam de leve (levantam na comemoração, caem no sono).
+- Olhos: arquinhos felizes (estado padrão) ou pontinhos azuis brilhantes. Bochechas rosadas, narizinho rosa, boquinha em "ω".
+- **Rabinho enrolado** em espiral que balança.
+- Segura uma **estrelinha dourada** facetada que cintila de tempos em tempos.
+- Um **coraçãozinho-lanterna** sobre a cabeça que acende (glow dourado) nas comemorações.
 
 Estados (troca com `AnimatedSwitcher`/interpolação, nunca corte seco):
 | Estado | Quando | Animação |
@@ -167,7 +168,7 @@ Sequência (~1,6s, interrompível):
 - Respeitar `MediaQuery.disableAnimations`: trocar movimentos por fades simples.
 
 ### 5.5 Ícone do app
-Rosto da Pepita com o capacete de coração sobre fundo rosa-bebê, em ícone adaptativo (foreground + background). Nome no launcher: **Pepita**.
+Rosto do Chocolatinho com o coraçãozinho sobre fundo azul-bebê, em ícone adaptativo (foreground + background). Nome no launcher: **Pepita**.
 
 ## 6. Bancos de frases (`frases.dart`)
 Sorteio aleatório, sem repetir a última usada. `{nome}` = nome configurado; `{momento}` = nome do momento.

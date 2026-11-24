@@ -6,7 +6,7 @@ App Android (Flutter) pessoal, feito só para a minha namorada. Lembra, com cari
 Este app **não cobra**. É renda extra e o lazer dela vem primeiro.
 - Nada de streak, sequência, meta, porcentagem de "cumprimento", contador regressivo ou ranking.
 - Nunca usar vermelho, "atrasado", "pendente", "você esqueceu", "não fez" ou qualquer texto de culpa.
-- Dia sem registro = "dia de descanso", sempre mostrado de forma positiva (Pepita dormindo feliz).
+- Dia sem registro = "dia de descanso", sempre mostrado de forma positiva (o Chocolatinho dormindo feliz).
 - Registrar é sempre opcional; quantidade é sempre opcional.
 - No máximo 1 notificação por momento. Nada de lembrete de "você ainda não postou".
 - Em caso de dúvida entre funcionalidade e fofura: a fofura ganha. O esforço deste projeto vai para visual e animação, não para complexidade.
@@ -17,7 +17,7 @@ Este app **não cobra**. É renda extra e o lazer dela vem primeiro.
 - `shared_preferences` para persistência (dados pequenos, tudo local, sem backend, sem login)
 - `google_fonts` (Fredoka para títulos, Quicksand para texto) — ou fontes empacotadas em `assets/fonts` para funcionar offline
 - Animações: preferir o que vem no Flutter (`AnimationController`, `AnimatedSwitcher`, `TweenAnimationBuilder`, `CustomPainter`). Pacote extra só se trouxer ganho claro (ex.: `flutter_animate`), e avisar antes.
-- Mascote Pepita desenhada em `CustomPainter` (vetorial, animável). Sem imagens de personagens de terceiros.
+- Mascote **Chocolatinho** (criação autoral, coelhinho de orelhas caídas) desenhada em `CustomPainter` (vetorial, animável). O widget segue chamado `Pepita` (nome do app). Sem imagens/desenhos de personagens de terceiros.
 
 ## Estrutura
 ```

@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/img/capa.png" alt="Telas do app Pepita: boas-vindas, Hoje e Cantinho" width="100%">
+<img src="docs/img/capa.png" alt="Telas do app Pepita: boas-vindas, Hoje e Caderninho" width="100%">
 
 # 💎 Pepita
 
@@ -19,7 +19,7 @@
 
 Minha namorada tem um trabalho CLT e, como renda extra, mantém um grupo de ofertas (o **Garimpô**) no WhatsApp: ela procura promoções, troca pelo link de afiliado dela e posta no grupo, tudo manualmente.
 
-Eu fiz a **Pepita** — uma toupeirinha garimpeira — para ajudar com **uma coisa só**: lembrar, com carinho, dos **3 momentos do dia** em que ela pode postar, e deixar ela anotar (se quiser) o que fez.
+Eu fiz a **Pepita** — o app, cujo nome vem da pepita de ouro do garimpo — e a mascote é o **Chocolatinho**, um coelhinho de orelhas caídas criado por ela. Juntos eles ajudam com **uma coisa só**: lembrar, com carinho, dos **3 momentos do dia** em que ela pode postar, e deixar ela anotar (se quiser) o que fez.
 
 | Momento | Horário padrão |
 |---|---|
@@ -46,7 +46,7 @@ Isso não é só intenção: há [testes automáticos](test/linguagem_gentil_tes
 
 <table>
   <tr>
-    <td align="center" width="20%"><img src="docs/img/hoje.png" alt="Tela Hoje"><br><b>Hoje</b><br><sub>Saudação, a Pepita e os 3 momentos. O momento "agora" brilha suavemente.</sub></td>
+    <td align="center" width="20%"><img src="docs/img/hoje.png" alt="Tela Hoje"><br><b>Hoje</b><br><sub>Saudação, o Chocolatinho e os 3 momentos. O momento "agora" brilha suavemente.</sub></td>
     <td align="center" width="20%"><img src="docs/img/sheet.png" alt="Sheet de registro"><br><b>Registro</b><br><sub>Contador opcional (começa vazio!) e dois botões igualmente gentis.</sub></td>
     <td align="center" width="20%"><img src="docs/img/cantinho.png" alt="Tela Cantinho"><br><b>Cantinho</b><br><sub>A semana em florzinhas. Dia sem postagem = botão de flor descansando.</sub></td>
     <td align="center" width="20%"><img src="docs/img/caderninho.png" alt="Tela Caderninho"><br><b>Caderninho</b><br><sub>Notinhas numa folha de caderno, com fontes fofinhas e papéis coloridos.</sub></td>
@@ -56,17 +56,17 @@ Isso não é só intenção: há [testes automáticos](test/linguagem_gentil_tes
 
 <sub>Os prints são do app rodando com dados de exemplo.</sub>
 
-### 🐹 A Pepita
+### 🐰 O Chocolatinho
 
-Uma mascote **original**, desenhada inteira em `CustomPainter` (sem imagens), com cinco estados que se misturam sem cortes secos:
+A mascote é **autoral** (criação dela), redesenhada inteira em `CustomPainter` (vetorial, sem imagens), com orelhas caídas que balançam, rabinho enrolado e uma estrelinha dourada. Tem cinco estados que se misturam sem cortes secos:
 
 | Estado | Quando | O que faz |
 |---|---|---|
-| `tranquila` | padrão | respira, pisca a cada 3–6 s, a joia cintila |
-| `animada` | algum momento está rolando | balança de lado a lado, lanterna pulsando |
-| `comemorando` | depois de "Postei!" | squash & stretch, partículas, lanterna acesa, número "voando" até o rodapé |
-| `aconchegada` | descansou / noite | olhinhos fechados, abraça a joia, "zzz" |
-| `curiosa` | toque longo / ajuste a corrigir | inclina a cabeça, "?" |
+| `tranquila` | padrão | respira, pisca a cada 3–6 s, a estrelinha cintila |
+| `animada` | algum momento está rolando | balança de lado a lado, orelhinhas levantam, coração brilha |
+| `comemorando` | depois de "Postei!" | pulinho com orelhas ao vento, partículas, coração aceso, número "voando" até o rodapé |
+| `aconchegada` | descansou / noite | olhinhos fechados, orelhas caídas, abraça a estrelinha, "zzz" |
+| `curiosa` | toque longo / ajuste a corrigir | uma orelha em pé, "?" |
 
 O desenho é separado do comportamento (`PosePepita` → `PepitaPainter`), então dá para trocar por uma arte feita à mão sem mexer no resto do app.
 
@@ -77,7 +77,7 @@ O desenho é separado do comportamento (`PosePepita` → `PepitaPainter`), entã
 - Respeita "reduzir animações" do sistema (movimento forte vira fade simples).
 - **Caderninho:** aba de anotações livres numa folha de caderno fofinha, com 4 fontes de letrinha e 6 papéis. A "bolinha de feitinho" é opcional e não conta nada.
 - Fontes **Fredoka** e **Quicksand** (mais as letrinhas do Caderninho) empacotadas — funciona 100% offline.
-- Ícone do app, imagem grande da notificação e silhueta da notificação gerados a partir do próprio desenho da Pepita ([`tool/gerar_arte_test.dart`](tool/gerar_arte_test.dart)).
+- Ícone do app, imagem grande da notificação e silhueta da notificação gerados a partir do próprio desenho do Chocolatinho ([`tool/gerar_arte_test.dart`](tool/gerar_arte_test.dart)).
 
 ## 🔔 Notificações
 
@@ -124,7 +124,7 @@ flutter run                       # num celular/emulador Android
 flutter build apk --release       # gera build/app/outputs/flutter-apk/app-release.apk
 ```
 
-Para regenerar o ícone e as imagens da notificação depois de mexer no desenho da Pepita:
+Para regenerar o ícone e as imagens da notificação depois de mexer no desenho do Chocolatinho:
 
 ```bash
 flutter test tool/gerar_arte_test.dart
