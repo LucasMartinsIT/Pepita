@@ -227,7 +227,7 @@ class _TelaHojeState extends State<TelaHoje> with TickerProviderStateMixin {
   Widget _areaPepita() {
     final reduzir = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
     return SizedBox(
-      height: 270,
+      height: 290,
       child: Stack(
         alignment: Alignment.bottomCenter,
         clipBehavior: Clip.none,
@@ -256,7 +256,7 @@ class _TelaHojeState extends State<TelaHoje> with TickerProviderStateMixin {
                 opacity: _cavando ? 0.55 : 1,
                 child: Pepita(
                   key: _chavePepita,
-                  tamanho: 190,
+                  tamanho: 225,
                   estado: _estadoPepita,
                   aoTocar: _tocouNaPepita,
                   aoSegurar: _segurouNaPepita,

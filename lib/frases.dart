@@ -9,7 +9,7 @@ class Frases {
     'Hora do garimpo, {nome}! 💎',
     'Psiu, {nome}… ✨',
     '{momento} chegou 🌸',
-    'A Pepita achou um tempinho pra você 💗',
+    'O Chocolatinho achou um tempinho pra você 💗',
     'Oi, {nome}! ☁️',
   ];
 
@@ -34,14 +34,14 @@ class Frases {
     'Arrasou, {nome}! ✨',
     'O Garimpô agradece 💗',
     'Achadinhos entregues com carinho 🌸',
-    'Olha você brilhando mais que a minha pepita! ✨',
+    'Olha você brilhando mais que a minha estrelinha! ✨',
   ];
 
   static const descanso = [
     'Descansar também é produtivo 💤',
     'Tá tudo bem. Amanhã tem mais 🌙',
     'Seu lazer vem primeiro, sempre 💗',
-    'Hoje a Pepita guarda as joias pra você ☁️',
+    'Hoje o Chocolatinho guarda as estrelinhas pra você ☁️',
   ];
 
   static const semPressao = [
@@ -60,7 +60,7 @@ class Frases {
   static const carinho = [
     'Oi! 💗',
     'Hihi, cócegas!',
-    'Achei uma joia: você ✨',
+    'Achei uma estrelinha: você ✨',
     'Já bebeu água hoje? 💧',
     'Tô orgulhosa de você 🌸',
   ];

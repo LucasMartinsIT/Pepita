@@ -45,7 +45,7 @@ void main() {
     expect(find.text('Garimpo da manhã'), findsOneWidget);
     expect(find.text('Garimpo do almoço'), findsOneWidget);
     expect(find.text('Garimpo da volta'), findsOneWidget);
-    expect(find.bySemanticsLabel('Pepita, a toupeirinha garimpeira'),
+    expect(find.bySemanticsLabel('Chocolatinho, o coelhinho do app'),
         findsWidgets);
   });
 

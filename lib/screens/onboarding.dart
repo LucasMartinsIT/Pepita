@@ -98,8 +98,8 @@ class _TelaOnboardingState extends State<TelaOnboarding> {
                       _Pagina(
                         titulo: 'Oi, ${store.nome}!',
                         texto:
-                            'Eu sou a Pepita 💎\nVou te lembrar dos seus momentos de garimpo, sem pressão nenhuma.',
-                        botao: 'Oi, Pepita!',
+                            'Eu sou o Chocolatinho 💎\nVou te lembrar dos seus momentos de garimpo, sem pressão nenhuma.',
+                        botao: 'Oi, Chocolatinho!',
                         aoTocar: _proxima,
                       ),
                       _Pagina(
