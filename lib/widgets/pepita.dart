@@ -7,7 +7,7 @@ import 'package:material_ui/material_ui.dart';
 
 import '../theme.dart';
 
-/// Os 5 estados da Pepita (ver docs/SPEC.md §5.2).
+/// Os 5 estados da mascote (o Chocolatinho) (ver docs/SPEC.md §5.2).
 enum EstadoPepita { tranquila, animada, comemorando, aconchegada, curiosa }
 
 /// Parâmetros que o painter desenha. Mutável e "ouvível": o painter repinta
@@ -49,14 +49,24 @@ class PosePepita extends ChangeNotifier {
   double zzz = 0;
   double interrogacao = 0;
 
+  /// Orelhas: -0.4 (bem caídas) a 1 (levantadas). 0 = relaxadas.
+  double orelhas = 0;
+
+  /// Só a orelha direita levantada (curiosidade).
+  double orelhaD = 0;
+
+  /// Multiplicador do balanço das orelhas e do rabinho (0 = parado).
+  double balancoOrelhas = 1;
+
   /// Tempo em segundos, para animar os "zzz".
   double tempo = 0;
 
   void atualizar() => notifyListeners();
 }
 
-/// Desenha a Pepita: uma toupeirinha garimpeira, tudo em formas arredondadas.
-/// O desenho usa uma grade de 100×100.
+/// Desenha o Chocolatinho: um coelhinho fofo de orelhas caídas, olhos azuis e
+/// rabinho enrolado, segurando uma estrelinha dourada. Tudo em formas
+/// arredondadas, numa grade de 100×100.
 class PepitaPainter extends CustomPainter {
   PepitaPainter(this.pose) : super(repaint: pose);
 
@@ -67,6 +77,10 @@ class PepitaPainter extends CustomPainter {
     final u = size.width / 100;
     canvas.save();
     canvas.scale(u);
+    // Um pouco menor, para as orelhas (que se abrem e levantam) caberem.
+    canvas.translate(50, 94);
+    canvas.scale(0.78);
+    canvas.translate(-50, -94);
 
     // Sombra no chão (não gira, só encolhe quando ela pula).
     final altura = (-pose.deslocY).clamp(0.0, 30.0);
@@ -74,7 +88,7 @@ class PepitaPainter extends CustomPainter {
     canvas.drawOval(
       Rect.fromCenter(
           center: const Offset(50, 94), width: 54 * encolher, height: 6.5),
-      Paint()..color = Paleta.rosa.withValues(alpha: 0.55 * encolher),
+      Paint()..color = Paleta.azul.withValues(alpha: 0.45 * encolher),
     );
 
     // Corpo: gira/estica a partir dos pezinhos.
@@ -84,13 +98,16 @@ class PepitaPainter extends CustomPainter {
     canvas.scale(pose.escalaX, pose.escalaY);
     canvas.translate(-50, -93);
 
-    _pes(canvas);
-    _orelhas(canvas);
+    _cauda(canvas);
     _corpo(canvas);
+    _pes(canvas);
+    _orelha(canvas, -1);
+    _orelha(canvas, 1);
+    _cabeca(canvas);
     _rosto(canvas);
-    _joia(canvas);
+    _estrela(canvas);
     _patinhas(canvas);
-    _capacete(canvas);
+    _coracaoDaCabeca(canvas);
     canvas.restore();
 
     _zzz(canvas);
@@ -98,81 +115,133 @@ class PepitaPainter extends CustomPainter {
     canvas.restore();
   }
 
-  void _pes(Canvas canvas) {
-    final p = Paint()..color = Paleta.pessegoSombra;
-    canvas.drawOval(Rect.fromCenter(center: const Offset(37, 92), width: 13, height: 7), p);
-    canvas.drawOval(Rect.fromCenter(center: const Offset(63, 92), width: 13, height: 7), p);
+  Paint get _contorno => Paint()
+    ..color = Paleta.contornoAzul
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 1.3
+    ..strokeJoin = StrokeJoin.round
+    ..strokeCap = StrokeCap.round;
+
+  void _branco(Canvas canvas, Rect r) {
+    canvas.drawOval(
+      r,
+      Paint()
+        ..shader = const RadialGradient(
+          center: Alignment(-0.25, -0.4),
+          radius: 1.0,
+          colors: [Paleta.branco, Paleta.branco, Paleta.azulBebe],
+          stops: [0.0, 0.7, 1.0],
+        ).createShader(r),
+    );
+    canvas.drawOval(r, _contorno);
   }
 
-  void _orelhas(Canvas canvas) {
-    final fora = Paint()..color = Paleta.pessego;
-    final dentro = Paint()..color = Paleta.rosa;
-    for (final x in [21.0, 79.0]) {
-      canvas.drawCircle(Offset(x, 50), 7, fora);
-      canvas.drawCircle(Offset(x, 50), 3.6, dentro);
+  void _cauda(Canvas canvas) {
+    final balanco = math.sin(pose.tempo * 4.2) * 0.12 * pose.balancoOrelhas;
+    canvas.save();
+    canvas.translate(68, 88);
+    canvas.rotate(balanco);
+    canvas.translate(-68, -88);
+    const c = Offset(76, 83);
+    canvas.drawCircle(c, 7.2, Paint()..color = Paleta.branco);
+    canvas.drawCircle(c, 7.2, _contorno);
+    // Espiral do rabinho.
+    final espiral = Path();
+    for (var i = 0; i <= 36; i++) {
+      final t = i / 36;
+      final ang = 0.6 + t * 3.2 * math.pi;
+      final raio = 0.8 + t * 4.6;
+      final pt = c + Offset(raio * math.cos(ang), raio * math.sin(ang));
+      if (i == 0) {
+        espiral.moveTo(pt.dx, pt.dy);
+      } else {
+        espiral.lineTo(pt.dx, pt.dy);
+      }
     }
+    canvas.drawPath(espiral, _contorno);
+    canvas.restore();
   }
 
   void _corpo(Canvas canvas) {
-    final rect = Rect.fromCenter(center: const Offset(50, 63), width: 66, height: 60);
+    _branco(canvas,
+        Rect.fromCenter(center: const Offset(50, 80), width: 40, height: 29));
+  }
+
+  void _pes(Canvas canvas) {
+    for (final x in [39.0, 61.0]) {
+      _branco(canvas,
+          Rect.fromCenter(center: Offset(x, 91.8), width: 15, height: 8.5));
+    }
+  }
+
+  /// [lado]: -1 esquerda, 1 direita. As orelhas caem para os lados, balançam
+  /// de leve e levantam na comemoração.
+  void _orelha(Canvas canvas, int lado) {
+    final sway = math.sin(pose.tempo * 1.7 + (lado > 0 ? 0.9 : 0)) *
+        0.05 *
+        pose.balancoOrelhas;
+    var ang = 0.55 - 1.2 * pose.orelhas + sway;
+    if (lado > 0) ang -= 1.1 * pose.orelhaD;
+    canvas.save();
+    canvas.translate(50 + lado * 22.0, 44);
+    canvas.rotate(lado * ang);
+    final r =
+        Rect.fromCenter(center: Offset(lado * 17.0, 0), width: 38, height: 18);
+    _branco(canvas, r);
     canvas.drawOval(
-      rect,
-      Paint()
-        ..shader = const RadialGradient(
-          center: Alignment(-0.3, -0.5),
-          radius: 1.0,
-          colors: [Color(0xFFFBE3D8), Paleta.pessego, Paleta.pessegoSombra],
-          stops: [0.0, 0.6, 1.0],
-        ).createShader(rect),
+      Rect.fromCenter(center: Offset(lado * 18.0, 0.5), width: 24, height: 9),
+      Paint()..color = Paleta.rosaBebe.withValues(alpha: 0.7),
     );
-    // Barriguinha creme.
-    canvas.drawOval(
-      Rect.fromCenter(center: const Offset(50, 80), width: 38, height: 24),
-      Paint()..color = Paleta.creme,
-    );
+    canvas.restore();
+  }
+
+  void _cabeca(Canvas canvas) {
+    _branco(canvas,
+        Rect.fromCenter(center: const Offset(50, 52), width: 62, height: 48));
   }
 
   void _rosto(Canvas canvas) {
     // Bochechas.
-    final b = Paint()..color = Paleta.rosaForte.withValues(alpha: 0.45);
-    canvas.drawOval(Rect.fromCenter(center: const Offset(33, 63.5), width: 9, height: 6), b);
-    canvas.drawOval(Rect.fromCenter(center: const Offset(67, 63.5), width: 9, height: 6), b);
+    final b = Paint()..color = Paleta.rosaForte.withValues(alpha: 0.4);
+    canvas.drawOval(
+        Rect.fromCenter(center: const Offset(29.5, 61), width: 10, height: 6), b);
+    canvas.drawOval(
+        Rect.fromCenter(center: const Offset(70.5, 61), width: 10, height: 6), b);
 
-    // Olhos.
-    for (final x in [40.0, 60.0]) {
-      _olho(canvas, x, 56);
+    for (final x in [38.0, 62.0]) {
+      _olho(canvas, x, 54);
     }
 
-    // Focinho.
+    // Narizinho.
     canvas.drawOval(
-      Rect.fromCenter(center: const Offset(50, 61.5), width: 8, height: 6),
+      Rect.fromCenter(center: const Offset(50, 58.8), width: 3.8, height: 2.6),
       Paint()..color = Paleta.rosaForte,
     );
-    canvas.drawCircle(const Offset(48.6, 60.4), 1.1,
-        Paint()..color = Paleta.branco.withValues(alpha: 0.7));
 
-    // Boquinha.
+    // Boquinha: "ω" fofa; abre na comemoração.
     final aberta = pose.boca;
-    final boca = Path()
-      ..moveTo(45.5, 66)
-      ..quadraticBezierTo(50, 66 + 3 + 4 * aberta, 54.5, 66);
     if (aberta > 0.15) {
-      canvas.drawPath(
-        boca..close(),
-        Paint()..color = Paleta.cacau.withValues(alpha: 0.85),
-      );
+      final rect = Rect.fromCenter(
+          center: Offset(50, 63.6 + aberta),
+          width: 6.4,
+          height: 1.5 + 4.5 * aberta);
+      canvas.drawOval(rect, Paint()..color = Paleta.cacau.withValues(alpha: 0.85));
       canvas.drawOval(
         Rect.fromCenter(
-            center: Offset(50, 68.2 + 2 * aberta), width: 4.2, height: 2.4 * aberta),
+            center: Offset(50, 65.2 + aberta), width: 3.4, height: 2.2 * aberta),
         Paint()..color = Paleta.rosaForte,
       );
     } else {
+      final boca = Path()
+        ..moveTo(46.6, 62)
+        ..quadraticBezierTo(48.3, 65, 50, 62.3)
+        ..quadraticBezierTo(51.7, 65, 53.4, 62);
       canvas.drawPath(
         boca,
         Paint()
-          ..color = Paleta.cacau
+          ..color = Paleta.olhoAzul.withValues(alpha: 0.85)
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.3
+          ..strokeWidth = 1.1
           ..strokeCap = StrokeCap.round,
       );
     }
@@ -186,83 +255,73 @@ class PepitaPainter extends CustomPainter {
       // Arquinho: curva para cima (feliz) ou para baixo (soninho).
       final curva = (1 - 2 * pose.sono) * (1 - 0.9 * pose.piscar);
       final p = Path()
-        ..moveTo(x - 4.2, y + 1.5 * (curva > 0 ? 1 : -1) * 0)
-        ..quadraticBezierTo(x, y - 6 * curva, x + 4.2, y);
+        ..moveTo(x - 3.8, y + 1)
+        ..quadraticBezierTo(x, y + 1 - 6 * curva, x + 3.8, y + 1);
       canvas.drawPath(
         p,
         Paint()
-          ..color = Paleta.cacau.withValues(alpha: arcoAlpha)
+          ..color = Paleta.olhoAzul.withValues(alpha: arcoAlpha)
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 2.3
+          ..strokeWidth = 2.1
           ..strokeCap = StrokeCap.round,
       );
     }
     if (pontoAlpha > 0.01) {
-      final alt = 5.4 * (1 - 0.92 * pose.piscar);
+      final alt = 6.4 * (1 - 0.92 * pose.piscar);
       canvas.drawOval(
-        Rect.fromCenter(center: Offset(x, y), width: 5.4, height: alt),
-        Paint()..color = Paleta.cacau.withValues(alpha: pontoAlpha),
+        Rect.fromCenter(center: Offset(x, y), width: 5.2, height: alt),
+        Paint()..color = Paleta.olhoAzul.withValues(alpha: pontoAlpha),
       );
       if (pose.piscar < 0.5) {
-        canvas.drawCircle(Offset(x + 1, y - 1.2), 1.1,
+        canvas.drawCircle(Offset(x + 0.9, y - 1.4), 1.1,
             Paint()..color = Paleta.branco.withValues(alpha: pontoAlpha));
+        canvas.drawCircle(Offset(x - 0.9, y + 1.2), 0.55,
+            Paint()..color = Paleta.branco.withValues(alpha: 0.7 * pontoAlpha));
       }
     }
   }
 
-  Path _gema(double cx, double cy, double r) => Path()
-    ..moveTo(cx - r, cy - r * 0.35)
-    ..lineTo(cx - r * 0.55, cy - r * 0.95)
-    ..lineTo(cx + r * 0.55, cy - r * 0.95)
-    ..lineTo(cx + r, cy - r * 0.35)
-    ..lineTo(cx, cy + r * 1.05)
-    ..close();
+  Path _caminhoEstrela(double cx, double cy, double r) {
+    final p = Path();
+    for (var i = 0; i < 10; i++) {
+      final raio = i.isEven ? r : r * 0.46;
+      final a = -math.pi / 2 + i * math.pi / 5;
+      final pt = Offset(cx + raio * math.cos(a), cy + raio * math.sin(a));
+      if (i == 0) {
+        p.moveTo(pt.dx, pt.dy);
+      } else {
+        p.lineTo(pt.dx, pt.dy);
+      }
+    }
+    return p..close();
+  }
 
-  void _joia(Canvas canvas) {
-    const cx = 50.0, cy = 80.0;
-    const r = 7.5;
-    final g = _gema(cx, cy, r);
-    final rect = g.getBounds();
+  void _estrela(Canvas canvas) {
+    const cx = 50.0, cy = 79.5;
+    const r = 8.2;
+    final g = _caminhoEstrela(cx, cy, r);
+    canvas.drawPath(g, Paint()..color = Paleta.dourado);
     canvas.drawPath(
       g,
       Paint()
-        ..shader = const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFFFFEBB8), Paleta.dourado, Paleta.douradoForte],
-        ).createShader(rect),
+        ..color = Paleta.douradoForte
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.6
+        ..strokeJoin = StrokeJoin.round,
     );
-    // Facetas.
-    final faceta = Paint()
-      ..color = Paleta.branco.withValues(alpha: 0.7)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 0.8
-      ..strokeJoin = StrokeJoin.round;
-    canvas.drawPath(
-      Path()
-        ..moveTo(cx - r, cy - r * 0.35)
-        ..lineTo(cx + r, cy - r * 0.35)
-        ..moveTo(cx - r * 0.2, cy - r * 0.35)
-        ..lineTo(cx - r * 0.55, cy - r * 0.95)
-        ..moveTo(cx + r * 0.2, cy - r * 0.35)
-        ..lineTo(cx + r * 0.55, cy - r * 0.95)
-        ..moveTo(cx - r * 0.2, cy - r * 0.35)
-        ..lineTo(cx, cy + r * 1.05)
-        ..moveTo(cx + r * 0.2, cy - r * 0.35)
-        ..lineTo(cx, cy + r * 1.05),
-      faceta,
-    );
+    canvas.drawCircle(const Offset(cx - 2.2, cy - 2.4), 1.2,
+        Paint()..color = Paleta.branco.withValues(alpha: 0.85));
 
     // Cintilar.
     if (pose.joia > 0.01) {
-      _estrela(canvas, Offset(cx + r * 0.9, cy - r * 1.1), 5.5 * pose.joia,
-          Paleta.branco.withValues(alpha: pose.joia));
-      _estrela(canvas, Offset(cx - r * 1.1, cy + r * 0.2), 3.2 * pose.joia,
+      _brilho(canvas, Offset(cx + r * 1.05, cy - r * 1.05), 5.5 * pose.joia,
+          Paleta.douradoForte.withValues(alpha: pose.joia));
+      _brilho(canvas, Offset(cx - r * 1.2, cy + r * 0.2), 3.2 * pose.joia,
           Paleta.dourado.withValues(alpha: pose.joia));
     }
   }
 
-  void _estrela(Canvas canvas, Offset c, double r, Color cor) {
+  void _brilho(Canvas canvas, Offset c, double r, Color cor) {
     final p = Path()
       ..moveTo(c.dx, c.dy - r)
       ..quadraticBezierTo(c.dx, c.dy, c.dx + r, c.dy)
@@ -274,91 +333,43 @@ class PepitaPainter extends CustomPainter {
   }
 
   void _patinhas(Canvas canvas) {
-    final fora = Paint()..color = Paleta.pessego;
-    final borda = Paint()
-      ..color = Paleta.pessegoSombra
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 0.8;
-    final almofada = Paint()..color = Paleta.rosa;
     final a = Curves.easeInOut.transform(pose.abraca);
     for (final lado in [-1.0, 1.0]) {
-      final x = lerpDouble(50 + lado * 25, 50 + lado * 9, a)!;
-      final y = lerpDouble(76, 80, a)!;
-      final giro = lado * lerpDouble(0.25, -0.5, a)!;
-      canvas.save();
-      canvas.translate(x, y);
-      canvas.rotate(giro);
-      final r = Rect.fromCenter(center: Offset.zero, width: 9.5, height: 12);
-      canvas.drawOval(r, fora);
-      canvas.drawOval(r, borda);
-      canvas.drawOval(
-          Rect.fromCenter(center: const Offset(0, 1.6), width: 4.4, height: 3.6), almofada);
-      for (final dx in [-2.4, 0.0, 2.4]) {
-        canvas.drawCircle(Offset(dx, -2.6), 1.0, almofada);
-      }
-      canvas.restore();
+      final x = lerpDouble(50 + lado * 19, 50 + lado * 8.5, a)!;
+      final y = lerpDouble(79, 80.5, a)!;
+      final r = Rect.fromCenter(center: Offset(x, y), width: 9, height: 10.5);
+      _branco(canvas, r);
+      canvas.drawCircle(Offset(x, y + 1.4), 1.5,
+          Paint()..color = Paleta.rosa.withValues(alpha: 0.8));
     }
   }
 
-  void _capacete(Canvas canvas) {
-    // Cúpula.
-    final cupula = Path()
-      ..moveTo(20, 46)
-      ..arcTo(Rect.fromCenter(center: const Offset(50, 46), width: 60, height: 50),
-          math.pi, math.pi, false)
-      ..close();
-    canvas.drawPath(cupula, Paint()..color = Paleta.creme);
-    canvas.drawPath(
-      cupula,
-      Paint()
-        ..color = Paleta.rosa
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.4
-        ..strokeJoin = StrokeJoin.round,
-    );
-    // Faixa rosinha.
-    canvas.save();
-    canvas.clipPath(cupula);
-    canvas.drawRect(const Rect.fromLTWH(18, 33, 64, 3.2),
-        Paint()..color = Paleta.rosaBebe);
-    canvas.restore();
-    // Aba.
-    final aba = RRect.fromRectAndRadius(
-        const Rect.fromLTWH(17, 44.5, 66, 5.6), const Radius.circular(3));
-    canvas.drawRRect(aba, Paint()..color = Paleta.cremeEscuro);
-    canvas.drawRRect(
-      aba,
-      Paint()
-        ..color = Paleta.rosa
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.1,
-    );
-
-    // Lanterna em forma de coração (brilho dourado).
-    const c = Offset(50, 28.5);
+  /// Coraçãozinho-lanterna sobre a cabeça (brilho dourado nas comemorações).
+  void _coracaoDaCabeca(Canvas canvas) {
+    const c = Offset(50, 27);
     if (pose.lanterna > 0.01) {
       canvas.drawCircle(
         c,
-        15 + 6 * pose.lanterna,
+        7 + 5 * pose.lanterna,
         Paint()
           ..color = Paleta.dourado.withValues(alpha: 0.55 * pose.lanterna)
-          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8),
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 7),
       );
     }
-    final coracao = _coracao(c, 5.6);
+    final coracao = _coracao(c, 4.6);
     canvas.drawPath(
       coracao,
-      Paint()
-        ..color = Color.lerp(Paleta.rosa, Paleta.dourado, pose.lanterna)!,
+      Paint()..color = Color.lerp(Paleta.rosa, Paleta.dourado, pose.lanterna)!,
     );
     canvas.drawPath(
       coracao,
       Paint()
-        ..color = Paleta.douradoForte.withValues(alpha: 0.5 + 0.4 * pose.lanterna)
+        ..color =
+            Color.lerp(Paleta.rosaForte, Paleta.douradoForte, pose.lanterna)!
         ..style = PaintingStyle.stroke
         ..strokeWidth = 0.9,
     );
-    canvas.drawCircle(Offset(c.dx - 2, c.dy - 1.8), 1,
+    canvas.drawCircle(Offset(c.dx - 1.7, c.dy - 1.5), 0.9,
         Paint()..color = Paleta.branco.withValues(alpha: 0.85));
   }
 
@@ -506,17 +517,20 @@ class _PepitaState extends State<Pepita> with SingleTickerProviderStateMixin {
     // ---- alvos por estado ----
     double pontos = 0, sono = 0, lanterna = 0.15, abraca = 0, boca = 0;
     double zzz = 0, duvida = 0, inclina = 0, respPeriodo = 3, respAmp = 0.03;
+    double orelhas = 0, orelhaD = 0;
     switch (estado) {
       case EstadoPepita.tranquila:
         break;
       case EstadoPepita.animada:
         lanterna = 0.55 + 0.35 * math.sin(_t * 2.6);
+        orelhas = 0.25;
         inclina = 0.07 * math.sin(_t * 2 * math.pi / 2.4) * mov;
         break;
       case EstadoPepita.comemorando:
         pontos = 1;
         lanterna = 1;
         boca = 1;
+        orelhas = 0.85 + 0.15 * math.sin(_t * 14) * mov;
         inclina = 0.05 * math.sin(_t * 9) * mov;
         break;
       case EstadoPepita.aconchegada:
@@ -526,12 +540,14 @@ class _PepitaState extends State<Pepita> with SingleTickerProviderStateMixin {
         respPeriodo = 5;
         respAmp = 0.025;
         lanterna = 0.05;
+        orelhas = -0.35;
         break;
       case EstadoPepita.curiosa:
         pontos = 1;
         duvida = 1;
         inclina = 0.2;
         lanterna = 0.3;
+        orelhaD = 1;
         break;
     }
 
@@ -549,6 +565,9 @@ class _PepitaState extends State<Pepita> with SingleTickerProviderStateMixin {
     p.abraca = _suave(p.abraca, abraca, dt, 4);
     p.boca = _suave(p.boca, boca, dt, 10);
     p.zzz = _suave(p.zzz, zzz, dt, 3);
+    p.orelhas = _suave(p.orelhas, orelhas, dt, 7);
+    p.orelhaD = _suave(p.orelhaD, orelhaD, dt, 7);
+    p.balancoOrelhas = mov;
     p.interrogacao = _suave(p.interrogacao, duvida, dt, 6);
     p.inclinacao = _suave(p.inclinacao, inclina, dt, estado == EstadoPepita.curiosa ? 7 : 10);
 
@@ -649,7 +668,7 @@ class _PepitaState extends State<Pepita> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: 'Pepita, a toupeirinha garimpeira',
+      label: 'Chocolatinho, o coelhinho do app',
       button: widget.aoTocar != null,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,

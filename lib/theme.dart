@@ -23,7 +23,9 @@ class Paleta {
   static const papelLinha = Color(0xFFCFE6FA);
   static const papelMargem = Color(0xFFF7B6CF);
 
-  // Tons da mascote
+  // Tons da mascote (Chocolatinho)
+  static const contornoAzul = Color(0xFF8DBDEB);
+  static const olhoAzul = Color(0xFF4A93E0);
   static const pessego = Color(0xFFF6D3C6);
   static const pessegoSombra = Color(0xFFEBB9AA);
   static const douradoForte = Color(0xFFF5B94F);
