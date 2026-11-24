@@ -1,5 +1,5 @@
 // Gera a arte do Android (ícone do app e imagem grande da notificação)
-// a partir do próprio desenho da Pepita (CustomPainter).
+// a partir do próprio desenho do mascote (Chocolatinho) (CustomPainter).
 //
 // Rode com:  flutter test tool/gerar_arte_test.dart
 import 'dart:io';
@@ -45,9 +45,12 @@ void main() {
     await _desenhar(
         t,
         k,
-        SizedBox(
+        Container(
           width: 400,
           height: 400,
+          padding: const EdgeInsets.all(24),
+          decoration: const BoxDecoration(
+              color: Paleta.azulBebe, shape: BoxShape.circle),
           child: CustomPaint(painter: PepitaPainter(_poseIcone())),
         ));
     await _salvar(t, k, '$_res/drawable-nodpi/pepita_grande.png', 256);
@@ -63,7 +66,7 @@ void main() {
           width: 400,
           height: 400,
           child: Padding(
-            padding: const EdgeInsets.all(70),
+            padding: const EdgeInsets.all(58),
             child: CustomPaint(painter: PepitaPainter(_poseIcone())),
           ),
         ));
@@ -80,9 +83,9 @@ void main() {
           Container(
             width: 400,
             height: 400,
-            padding: const EdgeInsets.all(34),
+            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Paleta.rosaBebe,
+              color: Paleta.azulBebe,
               borderRadius: BorderRadius.circular(90),
             ),
             child: CustomPaint(painter: PepitaPainter(_poseIcone())),
